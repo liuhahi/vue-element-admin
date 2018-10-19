@@ -1,13 +1,14 @@
 export default {
   route: {
     dashboard: '首页',
-    introduction: '简述',
-    documentation: '文档',
-    guide: '引导页',
-    permission: '权限测试页',
-    pagePermission: '页面权限',
     directivePermission: '指令权限',
+    documentation: '文档',
+    employees: '员工',
+    guide: '引导页',
     icons: '图标',
+    introduction: '简述',
+    pagePermission: '页面权限',
+    permission: '权限测试页',
     components: '组件',
     componentIndex: '介绍',
     tinymce: '富文本编辑器',
@@ -102,11 +103,13 @@ export default {
     imageUploadTips: '由于我在使用时它只有vue@1版本，而且和mockjs不兼容，所以自己改造了一下，如果大家要使用的话，优先还是使用官方版本。'
   },
   table: {
+    department: '所属部门',
     dynamicTips1: '固定表头, 按照表头顺序排序',
     dynamicTips2: '不固定表头, 按照点击顺序排序',
     dragTips1: '默认顺序',
     dragTips2: '拖拽后顺序',
     title: '标题',
+    ic: '身份证号',
     importance: '重要性',
     type: '类型',
     remark: '点评',
@@ -116,8 +119,10 @@ export default {
     reviewer: '审核人',
     id: '序号',
     date: '时间',
+    employee: '员工',
     author: '作者',
     readings: '阅读数',
+    sex: '性别',
     status: '状态',
     actions: '操作',
     edit: '编辑',
@@ -151,5 +156,12 @@ export default {
     close: '关闭',
     closeOthers: '关闭其它',
     closeAll: '关闭所有'
-  }
+  },
+  female: '女',
+  finance: '财务部',
+  logistic: '后勤',
+  male: '男',
+  marketing: '市场部',
+  sourcing: '采购部',
+  technology: '技术部'
 }
