@@ -2,12 +2,69 @@ version: 2
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: karthikiyengar/node-nightwatch:0.0.1
     steps:
       - checkout
-      - run:
-          name: Greeting
-          command: echo Hello, world.
-      - run:
-          name: Print the Current Time
-          command: date
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: sudo npm install -g codecov
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: yarn test
+      - run: codecov --token=${CODECOV_TOKEN}
+
+  build_prod:
+    docker:
+      - image: circleci/node:8.9
+    working_directory: ~/frontend
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: yarn install
+      # - run: npm rebuild node-sass --force
+      - run: yarn run build
+
+      # Cache the dist folder for the deploy job
+      - save_cache:
+          paths:
+            - dist
+          key: v1-dist-prod-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+
+  build_staging:
+      docker:
+        - image: circleci/node:8.9
+      working_directory: ~/frontend
+      steps:
+        - checkout
+
+        - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+        - run: yarn install
+        # - run: npm rebuild node-sass --force
+        - run: yarn run build-staging
+
+        # Cache the dist folder for the deploy job
+        - save_cache:
+            paths:
+              - dist
+            key: v1-dist-staging-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
