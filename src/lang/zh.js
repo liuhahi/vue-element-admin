@@ -103,7 +103,10 @@ export default {
     imageUploadTips: '由于我在使用时它只有vue@1版本，而且和mockjs不兼容，所以自己改造了一下，如果大家要使用的话，优先还是使用官方版本。'
   },
   table: {
+    birthday: '出生日期',
     department: '所属部门',
+    phone: '联系电话',
+    address: '联系地址',
     dynamicTips1: '固定表头, 按照表头顺序排序',
     dynamicTips2: '不固定表头, 按照点击顺序排序',
     dragTips1: '默认顺序',
@@ -130,7 +133,8 @@ export default {
     draft: '草稿',
     delete: '删除',
     cancel: '取 消',
-    confirm: '确 定'
+    confirm: '确 定',
+    user_name: '用户姓名'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
@@ -157,11 +161,13 @@ export default {
     closeOthers: '关闭其它',
     closeAll: '关闭所有'
   },
+  create_user: '添加新员工',
+  edit_user: '编辑员工资料',
   female: '女',
-  finance: '财务部',
-  logistic: '后勤',
+  Finance: '财务部',
+  Logistic: '后勤',
   male: '男',
-  marketing: '市场部',
-  sourcing: '采购部',
-  technology: '技术部'
+  Marketing: '市场部',
+  Sourcing: '采购部',
+  Technology: '技术部'
 }

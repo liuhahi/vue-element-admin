@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.department')" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ $t(scope.row.department.toLowerCase()) }}</span>
+          <span>{{ $t(scope.row.department) }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.sex')" width="70px" align="center">
@@ -72,29 +72,24 @@
       <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('table.type')" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+    <el-dialog :title="$t(textMap[dialogStatus])" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:50px;">
+        <el-form-item :label="$t('table.user_name')" prop="title">
+          <el-input v-model="temp.employee" style="width:200px;"/>
+        </el-form-item>
+        <el-form-item :label="$t('table.department')" prop="type">
+          <el-select v-model="temp.department" class="filter-item">
+            <el-option v-for="item in departmentOptions" :key="item.key" :label="$t(item.display_name)" :value="item.key"/>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('table.date')" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date"/>
+        <el-form-item :label="$t('table.birthday')" prop="birthday">
+          <el-date-picker v-model="temp.birthday" type="date" style="width:200px;" placeholder="Please pick a date"/>
         </el-form-item>
-        <el-form-item :label="$t('table.title')" prop="title">
-          <el-input v-model="temp.title"/>
+        <el-form-item :label="$t('table.phone')" prop="title">
+          <el-input v-model="temp.phone" style="width:200px;"/>
         </el-form-item>
-        <el-form-item :label="$t('table.status')">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('table.importance')">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;"/>
-        </el-form-item>
-        <el-form-item :label="$t('table.remark')">
-          <el-input :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.remark" type="textarea" placeholder="Please input"/>
+        <el-form-item :label="$t('table.address')" prop="title">
+          <el-input v-model="temp.address" type="textarea" rows="5"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -126,6 +121,14 @@ const calendarTypeOptions = [
   { key: 'US', display_name: 'USA' },
   { key: 'JP', display_name: 'Japan' },
   { key: 'EU', display_name: 'Eurozone' }
+]
+
+const departmentOptions = [
+  { key: 'Marketing', display_name: 'Marketing' },
+  { key: 'Technology', display_name: 'Technology' },
+  { key: 'Sourcing', display_name: 'Sourcing' },
+  { key: 'Logistic', display_name: 'Logistic' },
+  { key: 'Finance', display_name: 'Finance' }
 ]
 
 // arr to obj ,such as { CN : "China", US : "USA" }
@@ -173,18 +176,21 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
+        user_name: '',
         importance: 1,
         remark: '',
         timestamp: new Date(),
         title: '',
         type: '',
+        department: 'marketing',
         status: 'published'
       },
+      departmentOptions,
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: 'edit_user',
+        create: 'create_user'
       },
       dialogPvVisible: false,
       pvData: [],
@@ -270,6 +276,8 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      this.temp.department = this.$t(row.department)
+      console.log('temp is', this.temp)
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
