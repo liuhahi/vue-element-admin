@@ -300,3 +300,7 @@ export function uniqueArr(arr) {
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
+
+export function errorHandler(error, redirect, that) {
+  alert(error)
+}
