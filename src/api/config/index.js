@@ -4,7 +4,7 @@ export const CONFIG = () => {
   const token = localStorage.getItem('access_token')
   return {
     headers: {
-      Authorization: `Token ${token}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'
     }
   }

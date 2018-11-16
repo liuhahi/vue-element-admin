@@ -3,7 +3,6 @@ import { API_BASE, CONFIG, UNLOGIN_CONFIG } from './config'
 
 export default {
   login(cb, errorCb, payload) {
-    console.log('api base', API_BASE)
     return axios
       .post(
         `${API_BASE}/authentication`,
@@ -11,8 +10,17 @@ export default {
         UNLOGIN_CONFIG,
       )
       .then(response => cb(response))
-      .catch((e) => {
-        errorCb(e)
-      })
+      .catch(e => errorCb(e))
+  },
+  userHome(cb, errorCb, payload) {
+    console.log('config', CONFIG())
+    return axios
+      .post(
+        `${API_BASE}/pages`,
+        JSON.stringify(payload),
+        CONFIG(),
+      )
+      .then(response => cb(response))
+      .catch(e => errorCb(e))
   }
 }

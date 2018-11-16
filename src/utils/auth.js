@@ -1,7 +1,7 @@
 const TokenKey = 'access_token'
 
 export function getToken() {
-  return localStorage.getItem(TokenKey)
+  return localStorage.getItem(TokenKey) && localStorage.getItem(TokenKey) != 'undefined'
 }
 
 export function setToken(token) {

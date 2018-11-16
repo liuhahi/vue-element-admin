@@ -10,7 +10,8 @@ const state = {
   name: null,
   isStaff: null,
   isLocalAccount: null,
-  providers: []
+  providers: [],
+  user: {}
 }
 
 export default {

@@ -129,8 +129,10 @@ export default {
     handleLogin() {
       this.loading = true
       this.login(this.loginForm).then(() => {
+        console.log('return success')
         this.loading = false
         this.$router.push({ path: this.redirect || '/' })
+        // this.$router.push('/')
       }).catch(() => {
         this.loading = false
       })
