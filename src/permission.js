@@ -1,11 +1,17 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
+import {
+  Message
+} from 'element-ui'
 import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css'// progress bar style
-import { getToken } from '@/utils/auth' // getToken from cookie
+import 'nprogress/nprogress.css' // progress bar style
+import {
+  getToken
+} from '@/utils/auth' // getToken from cookie
 
-NProgress.configure({ showSpinner: false })// NProgress Configuration
+NProgress.configure({
+  showSpinner: false
+}) // NProgress Configuration
 
 // permission judge function
 function hasPermission(roles, permissionRoles) {
@@ -15,19 +21,23 @@ function hasPermission(roles, permissionRoles) {
   return true
 }
 
-const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
+const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   if (getToken()) { // determine if there has token
     /* has token*/
     if (to.path === '/login') {
-      next({ path: '/' })
+      next({
+        path: '/'
+      })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (store.getters.user === 0) { // 判断当前用户是否已拉取完user_info信息
         console.log('store', store)
-        store.dispatch('userHome', { page: 'user-home' }).then(() => {
+        store.dispatch('userHome', {
+          page: 'user-home'
+        }).then(() => {
           console.log('page home success')
         })
         // store.dispatch('GetUserInfo').then(res => { // 拉取user_info
@@ -47,7 +57,13 @@ router.beforeEach((to, from, next) => {
         if (hasPermission(store.getters.roles, to.meta.roles)) {
           next()
         } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
+          next({
+            path: '/401',
+            replace: true,
+            query: {
+              noGoBack: true
+            }
+          })
         }
         // 可删 ↑
       }

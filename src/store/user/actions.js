@@ -1,8 +1,16 @@
-import { errorHandler } from '@/utils'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import {
+  errorHandler
+} from '@/utils'
+import {
+  getToken,
+  setToken,
+  removeToken
+} from '@/utils/auth'
 import user from '@/api/user'
 
-export const login = ({ commit }, payload) =>
+export const login = ({
+  commit
+}, payload) =>
   user.login(
     (data) => {
       setToken(data.data.accessToken)
@@ -11,11 +19,27 @@ export const login = ({ commit }, payload) =>
     payload,
   )
 
-export const userHome = ({ commit }, payload) =>
+export const userHome = ({
+  commit
+}, payload) =>
   user.userHome(
     (data) => {
       commit('setUser', data.user)
     },
     e => errorHandler(e),
+    payload,
+  )
+
+export const logout = ({
+  commit
+}, payload) =>
+  user.logout(
+    (data) => {
+      removeToken()
+    },
+    e => {
+      removeToken()
+      // errorHandler(e)
+    },
     payload,
   )
