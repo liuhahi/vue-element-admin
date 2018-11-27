@@ -161,6 +161,14 @@ export default {
     closeOthers: '关闭其它',
     closeAll: '关闭所有'
   },
+  organization: {
+    create: '创建机构',
+    name: '机构名',
+    type: '机构类型',
+    select_type: '请选择类型',
+    clean: '清洁',
+    sales: '销售'
+  },
   create_user: '添加新员工',
   edit_user: '编辑员工资料',
   female: '女',
@@ -169,5 +177,7 @@ export default {
   male: '男',
   Marketing: '市场部',
   Sourcing: '采购部',
-  Technology: '技术部'
+  Technology: '技术部',
+  confirm: '确定',
+  cancel: '取消'
 }

@@ -1,6 +1,7 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+import Vue from 'vue'
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
@@ -302,5 +303,19 @@ export function isExternal(path) {
 }
 
 export function errorHandler(error, redirect, that) {
-  alert(error)
+  console.log(error)
+  try {
+    Vue.prototype.$alert(error.response.data.message, `Error : ${error.response.data.code}`, {
+      confirmButtonText: '确定'
+    // callback: action => {
+    //   Vue.prototype.$message({
+    //     type: 'error',
+    //     message: `action: ${action}`
+    //   })
+    // }
+    })
+  } catch (e) {
+    alert(e)
+  }
+  console.log('this alert')
 }
