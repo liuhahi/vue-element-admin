@@ -11,9 +11,9 @@
   </el-row>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="40" :sm="40" :lg="40" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+      <div v-for="org in orgs" :key="org" class="card-panel" @click="handleSetLineChartData('newVisitis')">
         <div class="card-button-wrapper">
-          {{ orgs[0].name }}
+          {{ org.name }}
         </div>
       </div>
     </el-col>
@@ -70,6 +70,7 @@ export default {
       this.createOrgLoading = true;
       this.createOrg(this.form).then(()=>{
         this.dialogFormVisible = false;
+        this.createOrgLoading = false;
       });
 
     }
@@ -83,7 +84,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .panel-group {
   margin-top: 18px;
-  .card-panel-col{
+  .card-panel-col {
     margin-bottom: 32px;
   }
   .card-panel {
@@ -94,14 +95,14 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
     &:hover {
       .card-panel-icon-wrapper {
         color: #fff;
       }
       .icon-people {
-         background: #40c9c6;
+        background: #40c9c6;
       }
       .icon-message {
         background: #36a3f7;
@@ -110,7 +111,7 @@ export default {
         background: #f4516c;
       }
       .icon-shopping {
-        background: #34bfa3
+        background: #34bfa3;
       }
     }
     .icon-people {
@@ -123,7 +124,7 @@ export default {
       color: #f4516c;
     }
     .icon-shopping {
-      color: #34bfa3
+      color: #34bfa3;
     }
     .card-button-wrapper {
       float: left;
