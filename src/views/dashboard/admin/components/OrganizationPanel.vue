@@ -9,6 +9,15 @@
       </div>
     </el-col>
   </el-row>
+  <el-row :gutter="40" class="panel-group">
+    <el-col :xs="40" :sm="40" :lg="40" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+        <div class="card-button-wrapper">
+          {{ orgs[0].name }}
+        </div>
+      </div>
+    </el-col>
+  </el-row>
   <!-- <create-org-dialog :dialogFormVisible="dialogFormVisible"></create-org-dialog> -->
   <el-dialog :title="$t('organization.create')" :visible.sync="dialogFormVisible" width="600px">
     <el-form v-loading="createOrgLoading" :model="form">
@@ -32,7 +41,7 @@
 
 <script>
 import CountTo from 'vue-count-to'
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -49,8 +58,11 @@ export default {
       createOrgLoading: false,
     }
   },
+  created(){
+    this.userHome();
+  },
   methods: {
-    ...mapActions(["createOrg"]),
+    ...mapActions(["createOrg", "userHome"]),
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
     },
@@ -61,6 +73,9 @@ export default {
       });
 
     }
+  },
+  computed: {
+    ...mapGetters(["orgs"])
   }
 }
 </script>

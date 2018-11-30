@@ -12,9 +12,10 @@ export default {
         `${API_BASE}/pages`,
         JSON.stringify({
           page: 'create-org',
-          action: 'start',
+          action: 'create',
           data: {
-            name: payload.name
+            name: payload.name,
+            type: payload.type
           }
         }),
         CONFIG(),

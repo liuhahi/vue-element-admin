@@ -23,8 +23,10 @@ export const userHome = ({
   commit
 }, payload) =>
   user.userHome(
-    (data) => {
-      commit('setUser', data.user)
+    (res) => {
+      console.log('orgs..', res.data.data.orgs)
+      commit('setUser', res.data.data.user)
+      commit('setOrgs', res.data.data.orgs)
     },
     e => errorHandler(e),
     payload,

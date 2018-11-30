@@ -11,7 +11,8 @@ const state = {
   isStaff: null,
   isLocalAccount: null,
   providers: [],
-  user: {}
+  user: {},
+  orgs: []
 }
 
 export default {

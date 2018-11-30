@@ -1,5 +1,8 @@
 export default {
-  setUser(state, payload) {
-    state.user = payload
+  setUser(state, user) {
+    state.user = user
+  },
+  setOrgs(state, orgs) {
+    state.orgs = orgs
   }
 }

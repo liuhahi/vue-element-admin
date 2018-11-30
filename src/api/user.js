@@ -21,7 +21,10 @@ export default {
     return axios
       .post(
         `${API_BASE}/pages`,
-        JSON.stringify(payload),
+        JSON.stringify({
+          page: 'user-home',
+          action: 'open'
+        }),
         CONFIG(),
       )
       .then(response => cb(response))
