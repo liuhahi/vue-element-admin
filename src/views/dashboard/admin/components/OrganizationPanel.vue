@@ -8,7 +8,7 @@
         <el-button type="primary" @click="dialogFormVisible = true">{{ $t('organization.create') }}</el-button>
       </div>
       <el-table
-        v-loading="listLoading"
+        v-loading="orgListLoading"
         :data="orgs"
         row-key="_id"
         border
@@ -18,7 +18,10 @@
       >
         <el-table-column min-width="300px" :label="$t('organization.name')">
           <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+            <router-link
+              :to="{ path: `/org/${scope.row._id}` }"
+              class="link-style"
+            >{{ scope.row.name }}</router-link>
           </template>
         </el-table-column>
 
