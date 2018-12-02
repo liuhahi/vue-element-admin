@@ -1,84 +1,141 @@
 <template>
   <div>
-  <el-row :gutter="40" class="panel-group">
-    <el-col :xs="40" :sm="40" :lg="40" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
-        <div class="card-button-wrapper">
-          <el-button type="primary" @click="dialogFormVisible = true">{{ $t('organization.create') }}</el-button>
-        </div>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>{{ $t('organization.manage')}}</span>
       </div>
-    </el-col>
-  </el-row>
-  <el-row :gutter="40" class="panel-group">
-    <el-col :xs="40" :sm="40" :lg="40" class="card-panel-col">
-      <div v-for="org in orgs" :key="org" class="card-panel" @click="handleSetLineChartData('newVisitis')">
-        <div class="card-button-wrapper">
-          {{ org.name }}
-        </div>
+      <div class="component-item">
+        <el-button type="primary" @click="dialogFormVisible = true">{{ $t('organization.create') }}</el-button>
       </div>
-    </el-col>
-  </el-row>
-  <!-- <create-org-dialog :dialogFormVisible="dialogFormVisible"></create-org-dialog> -->
-  <el-dialog :title="$t('organization.create')" :visible.sync="dialogFormVisible" width="600px">
-    <el-form v-loading="createOrgLoading" :model="form">
-      <el-form-item :label="$t('organization.name')" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('organization.name')" :label-width="formLabelWidth">
-        <el-select v-model="form.type" :placeholder="$t('organization.select_type')">
-          <el-option :label="$t('organization.clean')" value="company.clean"></el-option>
-          <el-option :label="$t('organization.sales')" value="company.sales"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" :disabled="createOrgLoading" @click="createOrgOnClick">{{ $t('confirm') }}</el-button>
-    </div>
-  </el-dialog>
+      <el-table
+        v-loading="listLoading"
+        :data="orgs"
+        row-key="_id"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%;margin-top:20px"
+      >
+        <el-table-column min-width="300px" :label="$t('organization.name')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="110px" align="center" :label="$t('organization.type')">
+          <template slot-scope="scope">
+            <span>{{ $t(typeConvert(scope.row.type.path)) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="110px" align="center" :label="$t('action')">
+          <template slot-scope="scope">
+            <el-button
+              type="danger"
+              size="small"
+              icon="el-icon-delete"
+              @click="deleteOrgActionClick(scope.row._id)"
+            >{{ $t('delete')}}</el-button>
+            <!-- <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="scope.row.edit=!scope.row.edit">Edit</el-button> -->
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <!-- <create-org-dialog :dialogFormVisible="dialogFormVisible"></create-org-dialog> -->
+    <el-dialog :title="$t('organization.create')" :visible.sync="dialogFormVisible" width="600px">
+      <el-form v-loading="createOrgLoading" :model="form">
+        <el-form-item :label="$t('organization.name')" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('organization.name')" :label-width="formLabelWidth">
+          <el-select v-model="form.type" :placeholder="$t('organization.select_type')">
+            <el-option :label="$t('organization.clean')" value="company.clean"></el-option>
+            <el-option :label="$t('organization.sales')" value="company.sales"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{ $t('cancel') }}</el-button>
+        <el-button
+          type="primary"
+          :disabled="createOrgLoading"
+          @click="createOrgOnClick"
+        >{{ $t('confirm') }}</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="$t('organization.create')" :visible.sync="deleteFormVisible" width="600px">
+      <div>{{$t('organization.delete_text')}}</div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="deleteFormVisible = false">{{ $t('cancel') }}</el-button>
+        <el-button
+          type="primary"
+          :disabled="createOrgLoading"
+          @click="deleteOrgOnClick"
+        >{{ $t('confirm') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import CountTo from 'vue-count-to'
-import { mapActions, mapGetters } from 'vuex';
+import CountTo from "vue-count-to";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
-    CountTo,
+    CountTo
   },
-  data(){
+  data() {
     return {
       dialogFormVisible: false,
+      deleteFormVisible: false,
+      selectedOrgId: "",
       form: {
         name: "",
-        type: "",
+        type: ""
       },
-      formLabelWidth: '120px',
+      formLabelWidth: "120px",
       createOrgLoading: false,
-    }
+      orgListLoading: false
+    };
   },
-  created(){
+  created() {
     this.userHome();
   },
   methods: {
     ...mapActions(["createOrg", "userHome"]),
     handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+      this.$emit("handleSetLineChartData", type);
     },
-    createOrgOnClick(){
+    createOrgOnClick() {
       this.createOrgLoading = true;
-      this.createOrg(this.form).then(()=>{
+      this.orgListLoading = true;
+      this.createOrg(this.form).then(() => {
         this.dialogFormVisible = false;
         this.createOrgLoading = false;
+        this.userHome().then(() => {
+          this.orgListLoading = false;
+        });
       });
-
+    },
+    deleteOrgActionClick(id) {
+      this.selectedOrgId = id;
+      this.deleteFormVisible = true;
+    },
+    deleteOrgOnClick() {
+      this.deleteFormVisible = false;
+      // this.deleteOrg({id: this.selectedOrgId});
+    },
+    typeConvert(text) {
+      if (text == "company.clean") return "organization.clean";
+      if (text == "company.sales") return "organization.sales";
     }
   },
   computed: {
     ...mapGetters(["orgs"])
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
