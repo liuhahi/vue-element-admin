@@ -9,9 +9,11 @@ const image_uri = 'https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70
 
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
+    ic: '@integer(350206198008040018, 450206198008040018)',
     id: '@increment',
     timestamp: +Mock.Random.date('T'),
     author: '@first',
+    employee: '@first',
     reviewer: '@first',
     title: '@title(5, 10)',
     content_short: '我是测试数据',
@@ -19,7 +21,10 @@ for (let i = 0; i < count; i++) {
     forecast: '@float(0, 100, 2, 2)',
     importance: '@integer(1, 3)',
     'type|1': ['CN', 'US', 'JP', 'EU'],
+    'sex|1': ['Male', 'Female'],
     'status|1': ['published', 'draft', 'deleted'],
+    'position|1': ['Admin', 'Bartender', 'Promoter'],
+    'department|1': ['Marketing', 'Technology', 'Sourcing', 'Logistic', 'Finance'],
     display_time: '@datetime',
     comment_disabled: true,
     pageviews: '@integer(300, 5000)',

@@ -13,7 +13,7 @@
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          v-model="loginForm.username"
+          v-model="loginForm.email"
           :placeholder="$t('login.username')"
           name="username"
           type="text"
@@ -66,6 +66,7 @@
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Login',
@@ -87,8 +88,9 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111'
+        email: 'user@example.com',
+        password: 'secret',
+        strategy: 'local'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -116,6 +118,7 @@ export default {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
+    ...mapActions(['login']),
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -124,20 +127,28 @@ export default {
       }
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+      this.loading = true
+      this.login(this.loginForm).then(() => {
+        console.log('return success')
+        this.loading = false
+        this.$router.push({ path: this.redirect || '/' })
+        // this.$router.push('/')
+      }).catch(() => {
+        this.loading = false
       })
+      // this.$refs.loginForm.validate(valid => {
+      //   if (valid) {
+          // this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+          //   this.loading = false
+          //   this.$router.push({ path: this.redirect || '/' })
+          // }).catch(() => {
+          //   this.loading = false
+          // })
+      //   } else {
+      //     console.log('error submit!!')
+      //     return false
+      //   }
+      // })
     },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
