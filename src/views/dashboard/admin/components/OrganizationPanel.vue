@@ -1,41 +1,48 @@
 <template>
   <div>
-  <el-row :gutter="40" class="panel-group">
-    <el-col :xs="40" :sm="40" :lg="40" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
-        <div class="card-button-wrapper">
-          <el-button type="primary" @click="dialogFormVisible = true">{{ $t('organization.create') }}</el-button>
+    <el-row :gutter="40" class="panel-group">
+      <el-col :xs="40" :sm="40" :lg="40" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+          <div class="card-button-wrapper">
+            <el-button type="primary" @click="dialogFormVisible = true">{{ $t('organization.create') }}</el-button>
+            <el-button type="primary" @click="dialogFormVisible = true">{{ $t('organization.join') }}</el-button>
+          </div>
         </div>
-      </div>
-    </el-col>
-  </el-row>
-  <el-row :gutter="40" class="panel-group">
-    <el-col :xs="40" :sm="40" :lg="40" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
-        <div class="card-button-wrapper">
-          {{ orgs[0].name }}
+      </el-col>
+    </el-row>
+    <el-row :gutter="40" class="panel-group">
+      <el-col v-for="org in orgList" :key='org._id'  :xs="40" :sm="40" :lg="40" class="card-panel-col">
+        <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+          <div class="card-button-wrapper">
+            {{ org.name }}
+          </div>
         </div>
+      </el-col>
+    </el-row>
+    <!-- create org -->
+    <el-dialog :title="$t('organization.create')" :visible.sync="dialogFormVisible" width="600px">
+      <el-form v-loading="dialogLoading" :model="form">
+        <el-form-item :label="$t('organization.name')" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{ $t('cancel') }}</el-button>
+        <el-button type="primary" :disabled="dialogLoading" @click="createOrgOnClick">{{ $t('confirm') }}</el-button>
       </div>
-    </el-col>
-  </el-row>
-  <!-- <create-org-dialog :dialogFormVisible="dialogFormVisible"></create-org-dialog> -->
-  <el-dialog :title="$t('organization.create')" :visible.sync="dialogFormVisible" width="600px">
-    <el-form v-loading="createOrgLoading" :model="form">
-      <el-form-item :label="$t('organization.name')" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('organization.name')" :label-width="formLabelWidth">
-        <el-select v-model="form.type" :placeholder="$t('organization.select_type')">
-          <el-option :label="$t('organization.clean')" value="company.clean"></el-option>
-          <el-option :label="$t('organization.sales')" value="company.sales"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">{{ $t('cancel') }}</el-button>
-      <el-button type="primary" :disabled="createOrgLoading" @click="createOrgOnClick">{{ $t('confirm') }}</el-button>
-    </div>
-  </el-dialog>
+    </el-dialog>
+    <!-- join organization -->
+    <el-dialog :title="$t('organization.join')" :visible.sync="dialogFormVisible" width="600px">
+      <el-form v-loading="dialogLoading" :model="form">
+        <el-form-item :label="$t('organization.name')" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{ $t('cancel') }}</el-button>
+        <el-button type="primary" :disabled="dialogLoading" @click="joinOrgOnClick">{{ $t('confirm') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -50,32 +57,44 @@ export default {
   data(){
     return {
       dialogFormVisible: false,
+      joinFormVisible: false,
       form: {
         name: "",
         type: "",
       },
       formLabelWidth: '120px',
-      createOrgLoading: false,
+      dialogLoading: false,
     }
   },
   created(){
-    this.userHome();
+    this.getOrgs().then(()=>{
+      console.log(this.orgList);
+    });
   },
   methods: {
-    ...mapActions(["createOrg", "userHome"]),
+    ...mapActions(["createOrg", "joinOrg", "getOrgs"]),
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
     },
     createOrgOnClick(){
-      this.createOrgLoading = true;
+      this.dialogLoading = true;
       this.createOrg(this.form).then(()=>{
         this.dialogFormVisible = false;
+        this.dialogLoading = false;
+      });
+
+    },
+    joinOrgOnClick(){
+      this.dialogLoading = true;
+      this.joinOrg(this.form).then(()=>{
+        this.dialogFormVisible = false;
+        this.dialogLoading = false;
       });
 
     }
   },
   computed: {
-    ...mapGetters(["orgs"])
+    ...mapGetters(["orgList"])
   }
 }
 </script>
