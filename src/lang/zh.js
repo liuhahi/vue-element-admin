@@ -162,6 +162,7 @@ export default {
     closeAll: '关闭所有'
   },
   organization: {
+    join: '加入机构',
     create: '创建机构',
     name: '机构名',
     type: '机构类型',

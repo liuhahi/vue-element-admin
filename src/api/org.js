@@ -9,13 +9,24 @@ export default {
   createOrg(cb, errorCb, payload) {
     return axios
       .post(
+        `${API_BASE}/orgs`,
+        JSON.stringify({
+          name: payload.name
+        }),
+        CONFIG(),
+      )
+      .then(response => cb(response))
+      .catch(e => errorCb(e))
+  },
+  joinOrg(cb, errorCb, payload) {
+    return axios
+      .post(
         `${API_BASE}/pages`,
         JSON.stringify({
-          page: 'create-org',
-          action: 'create',
-          data: {
-            name: payload.name,
-            type: payload.type
+          page: 'join-org',
+          'action': 'apply-join',
+          'data': {
+            'org': payload.name
           }
         }),
         CONFIG(),
@@ -25,10 +36,9 @@ export default {
   },
   getOrgs(cb, errorCb, payload) {
     return axios
-      .post(
-        `${API_BASE}/authentication`,
-        JSON.stringify(payload),
-        UNLOGIN_CONFIG,
+      .get(
+        `${API_BASE}/orgs`,
+        CONFIG(),
       )
       .then(response => cb(response))
       .catch(e => errorCb(e))

@@ -4,7 +4,8 @@ import mutations from './mutations'
 
 const state = {
   orgName: '',
-  orgType: ''
+  orgType: '',
+  orgList: []
 }
 
 export default {
