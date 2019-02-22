@@ -47,20 +47,20 @@
 </template>
 
 <script>
-import CountTo from 'vue-count-to'
-import { mapActions, mapGetters } from 'vuex';
+import CountTo from "vue-count-to";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
-    CountTo,
+    CountTo
   },
-  data(){
+  data() {
     return {
       dialogFormVisible: false,
       joinFormVisible: false,
       form: {
         name: "",
-        type: "",
+        type: ""
       },
       formLabelWidth: '120px',
       dialogLoading: false,
@@ -74,7 +74,7 @@ export default {
   methods: {
     ...mapActions(["createOrg", "joinOrg", "getOrgs"]),
     handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+      this.$emit("handleSetLineChartData", type);
     },
     createOrgOnClick(){
       this.dialogLoading = true;
@@ -90,19 +90,30 @@ export default {
         this.dialogFormVisible = false;
         this.dialogLoading = false;
       });
-
+    },
+    deleteOrgActionClick(id) {
+      this.selectedOrgId = id;
+      this.deleteFormVisible = true;
+    },
+    deleteOrgOnClick() {
+      this.deleteFormVisible = false;
+      // this.deleteOrg({id: this.selectedOrgId});
+    },
+    typeConvert(text) {
+      if (text == "company.clean") return "organization.clean";
+      if (text == "company.sales") return "organization.sales";
     }
   },
   computed: {
     ...mapGetters(["orgList"])
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .panel-group {
   margin-top: 18px;
-  .card-panel-col{
+  .card-panel-col {
     margin-bottom: 32px;
   }
   .card-panel {
@@ -113,14 +124,14 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
     &:hover {
       .card-panel-icon-wrapper {
         color: #fff;
       }
       .icon-people {
-         background: #40c9c6;
+        background: #40c9c6;
       }
       .icon-message {
         background: #36a3f7;
@@ -129,7 +140,7 @@ export default {
         background: #f4516c;
       }
       .icon-shopping {
-        background: #34bfa3
+        background: #34bfa3;
       }
     }
     .icon-people {
@@ -142,7 +153,7 @@ export default {
       color: #f4516c;
     }
     .icon-shopping {
-      color: #34bfa3
+      color: #34bfa3;
     }
     .card-button-wrapper {
       float: left;

@@ -168,7 +168,9 @@ export default {
     type: '机构类型',
     select_type: '请选择类型',
     clean: '清洁',
-    sales: '销售'
+    sales: '销售',
+    manage: '机构管理',
+    delete_text: '您是否要删除这个机构？'
   },
   create_user: '添加新员工',
   edit_user: '编辑员工资料',
@@ -180,5 +182,7 @@ export default {
   Sourcing: '采购部',
   Technology: '技术部',
   confirm: '确定',
-  cancel: '取消'
+  cancel: '取消',
+  delete: '删除',
+  action: '操作'
 }
